@@ -1,0 +1,122 @@
+package krelve.app.kuaihu;
+import android.app.Application;
+import android.content.Context;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+import java.io.File;
+
+
+public class Kpplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initImageLoader(getApplicationContext());
+    }
+
+    private void initImageLoader(Context context) {
+        File cacheDir = StorageUtils.getCacheDirectory(context);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                context).threadPoolSize(3)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .diskCache(new UnlimitedDiskCache(cacheDir)).writeDebugLogs()
+                .build();
+        ImageLoader.getInstance().init(config);
+
+    }
+} 
+LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="用户登录界面"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="用户名"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入您的用户名"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="密码"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入您的密码"/>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <Button
+        android:id="@+id/login"
+        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:text="登录"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
+</LinearLayout>
+
+
+ublic class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    Button button;
+    EditText username;
+    EditText password;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        button = (Button)findViewById(R.id.login);
+        username = (EditText)findViewById(R.id.username);
+        password = (EditText)findViewById(R.id.password);
+        button.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        String username1 = username.getText().toString();
+        String password1 = password.getText().toString();
+        String ok = "登录成功";
+        String fail = "登录失败";
+        if (username1.equals("lhk") && password1.equals("123456")) {
+            Toast.makeText(MainActivity.this,ok,Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(MainActivity.this,fail,Toast.LENGTH_SHORT).show();
+        }
+    }
+}
